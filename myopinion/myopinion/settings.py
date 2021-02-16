@@ -26,7 +26,7 @@ SECRET_KEY = 'llz&$wfvj^y25g*ge@$tzzi+^_w0-9&#xc!^vy8y%#!7@do7bq'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+AUTH_USER_MODEL = 'authentication.User'
 # Application definition
 
 INSTALLED_APPS = [
@@ -41,7 +41,8 @@ INSTALLED_APPS = [
 
     # local
     'authentication',
-
+    'reviews',
+    'user_profile',
 ]
 
 MIDDLEWARE = [
