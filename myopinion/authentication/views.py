@@ -5,8 +5,9 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from .utils import Util
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
-
+from myopinion.settings import EMAIL_HOST_USER
 from .serializers import RegisterSerializer
+from .models import User
 
 
 # Create your views here.
@@ -31,6 +32,7 @@ class RegisterView(generics.GenericAPIView):
             'subject': 'Verify Email',
             'body': email_body,
             'to': (user.email,),
+            'from_email': EMAIL_HOST_USER,
         }
 
         Util.send_email(data)

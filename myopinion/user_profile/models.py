@@ -15,3 +15,6 @@ class Profile(models.Model):
     about_me = models.TextField(null=True, blank=True)
     country = models.CharField(max_length=255, blank=True, null=True)
     sex = models.IntegerField(choices=SEXES, blank=True, null=True, )
+
+    def __str__(self):
+        return f'{self.user} profile'
