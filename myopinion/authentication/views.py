@@ -6,7 +6,7 @@ from .utils import Util
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 from myopinion.settings import EMAIL_HOST_USER, SECRET_KEY
-from .serializers import RegisterSerializer
+from .serializers import RegisterSerializer, LoginSerializer
 from .models import User
 import jwt
 
@@ -55,3 +55,12 @@ class VerifyEmail(views.APIView):
             return Response({'response': 'Email is verified'}, status.HTTP_200_OK)
         except jwt.ExpiredSignatureError:
             return Response({'error': 'Token expired'}, status.HTTP_400_BAD_REQUEST)
+
+
+class LoginView(generics.GenericAPIView):
+    serializer_class = LoginSerializer
+
+    def post(self, request) -> Response():
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
