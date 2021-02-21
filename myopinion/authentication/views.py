@@ -1,13 +1,14 @@
 from django.shortcuts import render
-from rest_framework import generics, status
+from rest_framework import generics, status, views
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from .utils import Util
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
-from myopinion.settings import EMAIL_HOST_USER
+from myopinion.settings import EMAIL_HOST_USER, SECRET_KEY
 from .serializers import RegisterSerializer
 from .models import User
+import jwt
 
 
 # Create your views here.
@@ -40,6 +41,17 @@ class RegisterView(generics.GenericAPIView):
         return Response(user_data, status.HTTP_201_CREATED)
 
 
-class VerifyEmail(generics.GenericAPIView):
-    def get(self, request):
-        pass
+class VerifyEmail(views.APIView):
+    def get(self, request) -> Response():
+        token = request.GET.get('token')
+
+        try:
+            payload = jwt.decode(
+                token, SECRET_KEY, algorithms=['HS256'])
+            user = User.objects.get(id=payload['user_id'])
+            if not user.is_verified:
+                user.is_verified = True
+                user.save()
+            return Response({'response': 'Email is verified'}, status.HTTP_200_OK)
+        except jwt.ExpiredSignatureError:
+            return Response({'error': 'Token expired'}, status.HTTP_400_BAD_REQUEST)
