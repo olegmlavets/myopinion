@@ -23,10 +23,10 @@ class RegisterView(generics.GenericAPIView):
         user = serializer.save()
         user_data = serializer.data
 
-        token = RefreshToken().for_user(user).access_token  # obtain access token for created user
+        token: object = RefreshToken().for_user(user).access_token  # obtain access token for created user
 
-        relative_link = reverse('email-verify')
-        current_site = get_current_site(request).domain
+        relative_link: str = reverse('email-verify')
+        current_site: str = get_current_site(request).domain
         absurl = f'http://{current_site}{relative_link}?token={token}'
         email_body = f'{user.username} use this link to verify your account: \n {absurl} '
         data = {
@@ -46,8 +46,7 @@ class VerifyEmail(views.APIView):
         token = request.GET.get('token')
 
         try:
-            payload = jwt.decode(
-                token, SECRET_KEY, algorithms=['HS256'])
+            payload: dict = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
             user = User.objects.get(id=payload['user_id'])
             if not user.is_verified:
                 user.is_verified = True

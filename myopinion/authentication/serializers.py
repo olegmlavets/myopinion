@@ -32,7 +32,7 @@ class LoginSerializer(serializers.ModelSerializer):
 
     tokens = serializers.SerializerMethodField(method_name='get_tokens')
 
-    def get_tokens(self, obj):
+    def get_tokens(self, obj) -> dict:
         user = User.objects.get(email=obj['email'])
 
         return {
@@ -40,11 +40,11 @@ class LoginSerializer(serializers.ModelSerializer):
             'access': user.tokens()['access']
         }
 
-    def validate(self, attrs):
+    def validate(self, attrs) -> dict:
         email = attrs.get('email', '')
         password = attrs.get('password', '')
         # filtered_user_by_email = User.objects.filter(email=email)
-        user = auth.authenticate(email=email, password=password)  # return a user if email, and password passed
+        user: User() = auth.authenticate(email=email, password=password)  # return a user if email, and password passed
 
         # if filtered_user_by_email.exists() and filtered_user_by_email[0].auth_provider != 'email':
         #     raise AuthenticationFailed(
