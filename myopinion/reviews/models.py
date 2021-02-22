@@ -10,8 +10,7 @@ class Topic(models.Model):  # can create a User with reputation >= 1000 or staff
     updated_at = models.DateTimeField(auto_now=True)
 
     def rating(self, ) -> float:
-        return self.reviews.aggregate(Avg('rating'))
-
+        return self.reviews.aggregate(Avg('rating')).get('rating__avg')
 
 
 class Review(models.Model):
