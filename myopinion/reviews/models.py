@@ -5,9 +5,10 @@ from authentication.models import User
 
 
 class Topic(models.Model):  # can create a User with reputation >= 1000 or staff
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def rating(self, ) -> float:
         return self.reviews.aggregate(Avg('rating')).get('rating__avg')
