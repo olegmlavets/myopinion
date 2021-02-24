@@ -1,7 +1,8 @@
 from django.urls import path
-from .views import TopicListCreateView, TopicRetrieveDestroyView
+from .views import TopicViewSet
 
 urlpatterns = [
-    path('topic/', TopicListCreateView.as_view(), name='topic-list'),
-    path('topic/<int:pk>/', TopicRetrieveDestroyView.as_view(), name='topic'),
+    path('topic/', TopicViewSet.as_view({'get': 'list', 'post': 'create'}), name='topic-list-create'),
+    path('topic/<int:pk>/', TopicViewSet.as_view({'get': 'retrieve', 'delete': 'destroy'}),
+         name='topic-retrieve-delete'),
 ]

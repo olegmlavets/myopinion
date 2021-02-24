@@ -7,7 +7,7 @@ from .managers import UserManager
 
 class User(AbstractBaseUser, PermissionsMixin):
     username_validator = UnicodeUsernameValidator()
-    username = models.CharField(max_length=255, unique=True, db_index=True, validators=[username_validator,])
+    username = models.CharField(max_length=255, unique=True, db_index=True, validators=[username_validator, ])
     email = models.EmailField(max_length=255, unique=True, db_index=True)
     is_verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -26,4 +26,4 @@ class User(AbstractBaseUser, PermissionsMixin):
                 'access': str(refresh.access_token)}
 
     def __str__(self):
-        return self.email
+        return self.username
