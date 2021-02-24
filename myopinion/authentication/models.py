@@ -1,32 +1,13 @@
+from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from rest_framework_simplejwt.tokens import RefreshToken
-
-
-class UserManager(BaseUserManager):
-
-    def create_user(self, username: str, email: str, password: str = None):
-
-        if username is None:
-            raise TypeError('Users must have username')
-        if email is None:
-            raise TypeError('Users must have email')
-
-        user = self.model(username=username, email=self.normalize_email(email))
-        user.set_password(password)  # if None, will  be generated random password
-        user.save()
-        return user
-
-    def create_superuser(self, username: str, email: str, password: str):
-        user = self.model(username=username, email=email, password=password)
-        user.is_superuser = True
-        user.is_stuff = True
-        user.save()
-        return user
+from .managers import UserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField(max_length=255, unique=True, db_index=True)
+    username_validator = UnicodeUsernameValidator()
+    username = models.CharField(max_length=255, unique=True, db_index=True, validators=[username_validator,])
     email = models.EmailField(max_length=255, unique=True, db_index=True)
     is_verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -35,7 +16,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     updated_at = models.DateTimeField(auto_now=True)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', ]
+    REQUIRED_FIELDS = []
 
     objects = UserManager()
 
