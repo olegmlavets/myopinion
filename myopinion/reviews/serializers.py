@@ -9,11 +9,24 @@ class CriterionSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    criterions = CriterionSerializer(many=True, allow_null=True)
+    criterions = CriterionSerializer(many=True, read_only=True)
+    author = serializers.StringRelatedField(read_only=True)
+
+    def validate(self, attrs):
+        if len(attrs.get('criterions', [])) > 3:
+            raise serializers.ValidationError({"error": "No more than 3 criterion for review"})
+        return attrs
+
+    def create(self, validated_data):
+        criterions_data: list = validated_data.pop('criterions', [])
+        new_review: Review() = Review.objects.create(**validated_data)
+        for item in criterions_data:
+            CriterionSerializer(**item).save(review=new_review.id)
+        return new_review
 
     class Meta:
         model = Review
-        fields = ['title', 'advantages', 'disadvantages', 'text', 'updated_at', 'rating', 'criterions']
+        fields = ['title', 'advantages', 'disadvantages', 'text', 'updated_at', 'rating', 'criterions', 'on', 'author']
 
 
 class TopicSerializer(serializers.ModelSerializer):
@@ -31,12 +44,3 @@ class TopicDetailSerializer(TopicSerializer):
     class Meta:
         model = Topic
         fields = ['title', 'creator', 'topic_rating', 'created_at', 'reviews', ]
-
-# class TopicDetailSerializer(serializers.ModelSerializer):
-#     topic_rating = serializers.FloatField(source='rating', read_only=True)
-#     creator = serializers.StringRelatedField(read_only=True)
-#     reviews = ReviewSerializer(many=True, read_only=True)
-#
-#     class Meta:
-#         model = Topic
-#         fields = ['title', 'creator', 'topic_rating', 'created_at', 'reviews', ]

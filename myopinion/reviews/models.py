@@ -8,7 +8,7 @@ class Topic(models.Model):  # can create a User with reputation >= 1000 or staff
     title = models.CharField(max_length=255, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    creator = models.ForeignKey(User, on_delete=models.CASCADE)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, )
 
     def rating(self, ) -> float:
         return self.reviews.aggregate(Avg('rating')).get('rating__avg')
@@ -16,12 +16,12 @@ class Topic(models.Model):  # can create a User with reputation >= 1000 or staff
 
 class Review(models.Model):
     all_points = (
-        ('0', 0),
-        ('1', 1),
-        ('2', 2),
-        ('3', 3),
-        ('4', 4),
-        ('5', 5),)
+        (0, 0),
+        (1, 1),
+        (2, 2),
+        (3, 3),
+        (4, 4),
+        (5, 5),)
     on = models.ForeignKey(Topic, on_delete=models.CASCADE, related_name='reviews')
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews')
     title = models.CharField(max_length=255)
@@ -41,19 +41,19 @@ class Review(models.Model):
 
 class Criterion(models.Model):
     all_points = (
-        ('0', 0),
-        ('1', 1),
-        ('2', 2),
-        ('3', 3),
-        ('4', 4),
-        ('5', 5),
-        ('6', 6),
-        ('7', 7),
-        ('8', 8),
-        ('9', 9),
-        ('10', 10),
+        (0, 0),
+        (1, 1),
+        (2, 2),
+        (3, 3),
+        (4, 4),
+        (5, 5),
+        (6, 6),
+        (7, 7),
+        (8, 8),
+        (9, 9),
+        (10, 10),
 
     )
     title = models.CharField(max_length=255)
     points = models.IntegerField(choices=all_points)
-    review = models.ForeignKey(Review, null=True, blank=True, on_delete=models.SET_NULL, related_name='criterions')
+    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='criterions')

@@ -7,8 +7,8 @@ class Profile(models.Model):
     user = models.OneToOneField(User, null=True, blank=True, related_name='profile', on_delete=models.CASCADE)
 
     SEXES = (
-        ('Male', 1),
-        ('Female', 2)
+        (1, 'Male'),
+        (2, 'Female')
     )
 
     birthday = models.DateTimeField(null=True, blank=True)
