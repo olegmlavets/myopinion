@@ -24,3 +24,8 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         return serializer.save(author=self.request.user)
+
+    def perform_update(self, serializer):
+        return serializer.save()
+
+

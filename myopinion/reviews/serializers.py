@@ -21,7 +21,6 @@ class ReviewSerializer(serializers.ModelSerializer):
         criterions_data: list = validated_data.pop('criterions', [])
         new_review = Review.objects.create(**validated_data)
         for item in criterions_data:
-            print('item', item)
             serializer = CriterionSerializer(data=item)
             serializer.is_valid()
             serializer.save(review=new_review)
@@ -29,7 +28,8 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
-        fields = ['title', 'advantages', 'disadvantages', 'text', 'updated_at', 'rating', 'criterions', 'on', 'author']
+        fields = ['id', 'title', 'advantages', 'disadvantages', 'text', 'updated_at', 'rating', 'criterions', 'on',
+                  'author']
 
 
 class TopicSerializer(serializers.ModelSerializer):
