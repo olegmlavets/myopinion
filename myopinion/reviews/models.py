@@ -36,7 +36,7 @@ class Review(models.Model):
     # dislikes = ''
 
     def __str__(self):
-        return f'+: {self.advantages} \n -: {self.disadvantages}'
+        return self.title
 
 
 class Criterion(models.Model):

@@ -9,7 +9,7 @@ class CriterionSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    criterions = CriterionSerializer(many=True, read_only=True)
+    criterions = CriterionSerializer(many=True, allow_null=True)
     author = serializers.StringRelatedField(read_only=True)
 
     def validate(self, attrs):
@@ -19,9 +19,12 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         criterions_data: list = validated_data.pop('criterions', [])
-        new_review: Review() = Review.objects.create(**validated_data)
+        new_review = Review.objects.create(**validated_data)
         for item in criterions_data:
-            CriterionSerializer(**item).save(review=new_review.id)
+            print('item', item)
+            serializer = CriterionSerializer(data=item)
+            serializer.is_valid()
+            serializer.save(review=new_review)
         return new_review
 
     class Meta:
