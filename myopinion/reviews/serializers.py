@@ -28,23 +28,20 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         criterions_list: list = validated_data.pop('criterions', [])
-        print('criter_list', criterions_list)
         criterions = instance.criterions.all()
-        print('criter', criterions)
 
         instance.title = validated_data.get('title', instance.title)
-        instance.advantages = validated_data.get('advantages ', instance.title)
-        instance.disadvantages = validated_data.get('disadvantages', instance.title)
-        instance.text = validated_data.get('text', instance.title)
-        instance.rating = validated_data.get('rating', instance.title)
+        instance.advantages = validated_data.get('advantages', instance.advantages)
+        instance.disadvantages = validated_data.get('disadvantages', instance.disadvantages)
+        instance.text = validated_data.get('text', instance.text)
+        instance.rating = validated_data.get('rating', instance.rating)
 
-        # for data, item in criterions_list, criterions:
-        #     print('item: ', item)
-        #     print('date: ', data)
-        #
-        #     # item.title = data.get('title', item.title)
-        #     # item.points = data.get('points', item.title)
-        #     item.save()
+        counter = 0
+        for item in criterions:
+            item.title = criterions_list[counter].get('title', item.title)
+            item.points = criterions_list[counter].get('points', item.title)
+            item.save()
+            counter += 1
 
         instance.save()
         return instance
