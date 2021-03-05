@@ -26,3 +26,11 @@ EMAIL_HOST_PASSWORD=mail_password
  - **Project launch**
 
 `docker-compose up`
+
+ - **In the plans**
+
+`Add celery`
+
+`Send emails via celery`
+
+`Add email notifications via celery`
