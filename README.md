@@ -29,8 +29,6 @@ EMAIL_HOST_PASSWORD=mail_password
 
  - **In the plans**
 
-`Add celery`
-
-`Send emails via celery`
-
 `Add email notifications via celery`
+
+`Optimize docker containers`
