@@ -16,3 +16,9 @@ class Util:
     def send_email(data: dict) -> None:
         email = EmailMessage(**data)  # param "to" must be a tuple or list
         EmailThread(email).start()
+
+
+def send(data: dict) -> bool:
+    email = EmailMessage(**data)
+    result = email.send()
+    return result

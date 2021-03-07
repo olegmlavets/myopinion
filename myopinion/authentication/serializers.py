@@ -5,6 +5,8 @@ from rest_framework.exceptions import AuthenticationFailed
 from .models import User
 
 
+
+
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(max_length=255, min_length=4, required=True, write_only=True)
 

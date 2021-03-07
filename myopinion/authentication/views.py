@@ -9,6 +9,7 @@ from myopinion.settings import EMAIL_HOST_USER, SECRET_KEY
 from .serializers import RegisterSerializer, LoginSerializer
 from .models import User
 import jwt
+from .tasks import send_async_email
 
 
 # Create your views here.
@@ -36,7 +37,9 @@ class RegisterView(generics.GenericAPIView):
             'from_email': EMAIL_HOST_USER,
         }
 
-        Util.send_email(data)
+        # Util.send_email(data) # send email with a new thread
+
+        send_async_email.delay(data)  # send email with celery
 
         return Response(user_data, status.HTTP_201_CREATED)
 

@@ -119,12 +119,28 @@ REST_FRAMEWORK = {
 
 }
 
+# email settings
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.ukr.net'
 
 EMAIL_PORT = 465
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'test@mail.com')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'password')
+
+# celery/redis settings
+
+REDIS_HOST = 'redis'  # service name or '0.0.0.0'
+REDIS_PORT = '6379'
+
+CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
+CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
+CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
+
+
 
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # Console mail backend ()
