@@ -27,6 +27,17 @@ services:
     command: celery -A myopinion worker -l info
     volumes:
       - ./myopinion:/usr/src/myopinion/
+    env_file:
+      - ./.env.dev
+
+  celery_beat:
+    build: ./myopinion
+    command: celery -A myopinion beat -l info
+    volumes:
+      - ./myopinion:/usr/src/myopinion/
+    env_file:
+      - ./.env.dev
+
 
 volumes:
   postgres_data:
