@@ -15,6 +15,8 @@ class UserManager(BaseUserManager):
         user = self.model(username=username, email=self.normalize_email(email))
         user.set_password(password)  # generate password-hash
         user.save()
+        from user_profile.models import Profile
+        Profile.objects.create(user=user)
         return user
 
     def create_superuser(self, username: str, email: str, password: str):

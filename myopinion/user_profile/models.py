@@ -4,7 +4,7 @@ from authentication.models import User
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, null=True, blank=True, related_name='profile', on_delete=models.CASCADE)
+    user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
 
     SEXES = (
         (1, 'Male'),
