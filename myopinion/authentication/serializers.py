@@ -5,8 +5,6 @@ from rest_framework.exceptions import AuthenticationFailed
 from .models import User
 
 
-
-
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(max_length=255, min_length=4, required=True, write_only=True)
 
@@ -45,12 +43,8 @@ class LoginSerializer(serializers.ModelSerializer):
     def validate(self, attrs) -> dict:
         email = attrs.get('email', '')
         password = attrs.get('password', '')
-        # filtered_user_by_email = User.objects.filter(email=email)
-        user: User() = auth.authenticate(email=email, password=password)  # return a user if email, and password passed
 
-        # if filtered_user_by_email.exists() and filtered_user_by_email[0].auth_provider != 'email':
-        #     raise AuthenticationFailed(
-        #         detail='Please continue your login using ' + filtered_user_by_email[0].auth_provider)
+        user: User() = auth.authenticate(email=email, password=password)  # return a user if email, and password passed
 
         if not user:
             raise AuthenticationFailed('Invalid credentials, try again')

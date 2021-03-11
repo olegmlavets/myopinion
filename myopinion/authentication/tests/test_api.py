@@ -35,9 +35,34 @@ class AuthenticationApiTestCase(APITestCase):
         token: object = RefreshToken().for_user(self.user).access_token
         relative_link: str = reverse('email-verify')
 
-        absurl = f'http://localhost{relative_link}?token={token}'
+        absurl = f'{relative_link}?token={token}'
         response = self.client.get(absurl)
-        print(response.status_code)
+
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.user.refresh_from_db()
         self.assertEqual(self.user.is_verified, True)
+
+    def test_login(self):
+        url = reverse('login')
+        self.user.is_verified = True
+        self.user.save()
+        self.user.refresh_from_db()
+
+        expected_output = {
+            'email': self.user.email,
+            'username': self.user.username,
+            'tokens': self.user.tokens
+        }
+
+        data = {
+            "email": self.user.email,
+            "password": self.user.password
+
+        }
+
+        json_data = json.dumps(data)
+        response = self.client.post(path=url, data=json_data, content_type='application/json')
+        print("response content", response.content)
+        # self.assertEqual(status.HTTP_200_OK, response.status_code)
+        # self.assertEqual(expected_output, response.content)
+
