@@ -17,11 +17,10 @@ def send_async_email(data: dict) -> None:
 def send_beat_email() -> None:
     actual = datetime.now(tz=pytz.timezone(TIME_ZONE))
     delta = timedelta(days=SEND_MAIL_IN)
-    actual_max = actual + timedelta(minutes=2)
 
     for user in User.objects.all():
         when_send = user.created_at + delta
-        if actual <= when_send <= actual_max:
+        if when_send <= actual and not user.is_received_email:
             data = {
                 'subject': 'Feedback',
                 'body': 'Please leave feedback',
@@ -30,3 +29,5 @@ def send_beat_email() -> None:
             }
 
             send_async_email.delay(data=data)
+            user.is_received_email = True
+            user.save()
