@@ -34,11 +34,7 @@ class LoginSerializer(serializers.ModelSerializer):
 
     def get_tokens(self, obj) -> dict:
         user = User.objects.get(email=obj['email'])
-
-        return {
-            'refresh': user.tokens()['refresh'],
-            'access': user.tokens()['access']
-        }
+        return user.tokens()
 
     def validate(self, attrs) -> dict:
         email = attrs.get('email', '')

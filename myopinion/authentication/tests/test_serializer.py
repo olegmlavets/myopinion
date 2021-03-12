@@ -11,8 +11,8 @@ class AuthenticationSerializerTestCase(TestCase):
         serialzier_data = RegisterSerializer(instance=user).data
 
         exepted_data = {
-            "email": "email@test.com",
-            "username": "testusername"
+            "email": user.email,
+            "username": user.username
         }
         self.assertEqual(serialzier_data, exepted_data)
 
@@ -23,8 +23,8 @@ class AuthenticationSerializerTestCase(TestCase):
             "password": "testpassword"
 
         }
-        serialzier_data = RegisterSerializer(data=wrong_data).is_valid()
+        serializer_data = RegisterSerializer(data=wrong_data).is_valid()
 
-        exepted_data = False
+        excepted_data = False
 
-        self.assertEqual(serialzier_data, exepted_data)
+        self.assertEqual(serializer_data, excepted_data)
