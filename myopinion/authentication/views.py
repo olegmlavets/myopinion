@@ -57,6 +57,8 @@ class VerifyEmail(views.APIView):
             return Response({'response': 'Email is verified'}, status.HTTP_200_OK)
         except jwt.ExpiredSignatureError:
             return Response({'error': 'Token expired'}, status.HTTP_400_BAD_REQUEST)
+        except jwt.exceptions.DecodeError:
+            return Response({'error': 'Decode Error'}, status.HTTP_400_BAD_REQUEST)
 
 
 class LoginView(generics.GenericAPIView):
