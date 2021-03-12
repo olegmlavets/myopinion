@@ -140,6 +140,10 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
+# Celery tasks settings
+SEND_MAIL_FEEDBACK_IN: int = 10  # in days
+CHECK_SEND_INTERVAL: str = '24'  # in hours
+
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # Console mail backend ()
 

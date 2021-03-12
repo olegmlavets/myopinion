@@ -2,7 +2,6 @@ from django.shortcuts import render
 from rest_framework import generics, status, views
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
-from .utils import Util
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 from myopinion.settings import EMAIL_HOST_USER, SECRET_KEY
